@@ -51,7 +51,7 @@ const SEEDALL={"tx": {"01ff48a1e72uuepfgdc3": {"amount": 1500, "date": "2026-07-
 const TL={start:'متبقي من الدورة',buy:'شراء',sell:'بيع',dead:'نافق',born:'من الأمهات'},SGN={start:1,buy:1,born:1,sell:-1,dead:-1};
 const NAV=[['home','🏠','الرئيسية'],['tx','💸','الحسابات'],['herd','🐑','الخرفان'],['care','💉','البيطري'],['mom','🐐','الأمهات']];
 const S={tx:[],hd:[],sheep:[],vet:[],batch:[],mom:[],mbirth:[],mscan:[],mtx:[],cfg:{}};let db=null,tab='home',sub={herd:'sheep',care:'feed',mom:'ewe'},flt='الكل',sf='موجود',bf='الكل';
-function toast(m){const d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;top:60px;right:16px;left:16px;background:#1b1e3b;color:#fff;border-radius:16px;padding:14px;z-index:99;text-align:center;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.4)';document.body.append(d);setTimeout(()=>d.remove(),3500)}
+function toast(m){const d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;top:60px;right:16px;left:16px;background:#1b1e3b;color:#fff;border-radius:16px;padding:14px;z-index:99;text-align:center;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.4)';document.body.append(d);setTimeout(()=>d.remove(),9000)}
 function ask(t,cb){const el=document.createElement('div');el.className='sheet';el.innerHTML=`<form><div class="n" style="font-size:18px">${t}</div><input name="v" required><button class="go">حفظ</button><button type="button" class="ghost" data-x>إلغاء</button></form>`;el.onclick=e=>{if(e.target==el||e.target.dataset.x!=null)el.remove()};el.querySelector('form').onsubmit=e=>{e.preventDefault();cb(e.target.v.value.trim());el.remove()};document.body.append(el)}
 const $=s=>document.querySelector(s),f=n=>Math.round(n).toLocaleString('en-US'),e1=n=>(Math.round(n*10)/10).toLocaleString('en-US');
 const dt=s=>s?new Date(s+'T00:00:00').toLocaleDateString('ar-EG',{day:'numeric',month:'short'}):'';
@@ -133,9 +133,13 @@ function sheet(col,id,pre={}){const d=id?{wd:today(),...S[col].find(x=>x.id==id)
  el.querySelector('form').onsubmit=async ev=>{ev.preventDefault();if(!db)return;const o=Object.fromEntries(new FormData(ev.target));
   ['amount','price','count','deadm','deadf','from_','to','births','males','females','dead','embryos'].forEach(k=>{if(k in o)o[k]=+o[k]});if(/^\d+$/.test(o.num||''))o.num=+o.num;
   try{if(col=='sheep'){const old=id?S.sheep.find(x=>x.id==id):null,w={...(old?.w||{})};if(o.wd&&o.wv)w[o.wd]=+o.wv;delete o.wd;delete o.wv;o.w=w;await db.collection('sheep').doc(id||docId(o.num)).set(o)}
-   else if(id)await db.collection(col).doc(id).set(o);else if(col=='mom')await db.collection('mom').doc(docId(o.num)).set(o);else await db.collection(col).add(o);el.remove()}catch(_){toast('مش مسموح لك بالحفظ')}};
+   else if(id)await db.collection(col).doc(id).set(o);else if(col=='mom')await db.collection('mom').doc(docId(o.num)).set(o);else await db.collection(col).add(o);el.remove()}catch(er){toast('مش مسموح لك بالحفظ ('+(er.code||er.message)+')')}};
  document.body.append(el)}
-const loaded={};
+const loaded={},MT={};
+function netBanner(){const v=Object.values(MT),el=$('#net');if(!el)return;
+ if(v.some(m=>m.p))el.innerHTML='<div class="card am" style="text-align:center;font-weight:700">⏳ بيتحفظ على السيرفر… متقفلش الصفحة</div>';
+ else if(v.length&&v.every(m=>m.c))el.innerHTML='<div class="card r" style="text-align:center;font-weight:700">⚠️ مش واصل للسيرفر – اللي بتعرضه ممكن مايكونش محفوظ</div>';
+ else el.innerHTML=''}
 const OLD=['2026-06-10','2026-07-11'],badV=y=>(y.date=='2026-07-11'&&/ديفكول/.test(y.note))||(y.date=='2026-06-10'&&/ليفافلوك/.test(y.note)),cl=s=>{const{id,...r}=s;return r};
 const docId=n=>/^\d+$/.test(String(n))?String(n):'n'+[...String(n)].map(c=>c.charCodeAt(0).toString(36)).join('');
 const sk=x=>S.sheep.find(s=>String(s.num)==String(x.num));
@@ -150,7 +154,7 @@ document.addEventListener('click',async e=>{const t=e.target.closest('button,[da
  if(D.s){const[k,v]=D.s.split(':');sub[k]=v;render()}
  if(D.edit&&db){const[c,i]=D.edit.split(':');sheet(c,i)}
  if(t.id=='fab'&&db){const c={home:'tx',tx:'tx',herd:{sheep:'sheep',move:'hd',batch:'batch'}[sub.herd],care:'vet',mom:{ewe:'mom',birth:'mbirth',scan:'mscan',mtx:'mtx'}[sub.mom]}[tab];sheet(c,null,c=='sheep'?{barn:bf=='-'?'':bf}:{})}
- if(t.id=='impall'){t.disabled=true;t.textContent='جاري الحفظ… استنى';try{const b=db.batch();let n=0;for(const[c,o]of Object.entries(SEEDALL)){if(c=='cfg'){if(!Object.keys(S.cfg||{}).length){b.set(db.doc('cfg/main'),o.main);n++}continue}if(S[c]&&S[c].length)continue;for(const[id,d]of Object.entries(o)){b.set(db.collection(c).doc(id),d);n++}}await Promise.race([b.commit(),new Promise((_,no)=>setTimeout(()=>no(new Error('الاتصال بطيء، جرب تاني')),40000))]);toast('تم استيراد '+n+' سجل ✅')}catch(e){toast('حصل خطأ: '+e.message);t.disabled=false;t.textContent='حاول تاني'}}if(t.id=='upd'){t.disabled=true;await applyUpd(t)}if(t.id=='impm'){t.disabled=true;let n=0;try{for(const c of['mom','mbirth','mtx'])for(const x of SEEDM[c]){const{_id,...r}=x;_id?await db.collection(c).doc(_id).set(r):await db.collection(c).add(r);t.textContent='جاري الاستيراد '+(++n)}}catch(_){toast('حصل خطأ في الاستيراد')}}if(t.id=='imp'){t.disabled=true;let n=0;try{for(const c of['tx','hd','sheep','vet','batch'])if(!S[c].length)for(const x of SEED[c]){c=='sheep'?await db.collection(c).doc(String(x.num)).set(x):await db.collection(c).add(x);t.textContent='جاري الاستيراد '+(++n)}}catch(_){toast('حصل خطأ في الاستيراد')}}});
+ if(t.id=='impall'){t.disabled=true;t.textContent='جاري الحفظ… استنى';try{const b=db.batch();let n=0;for(const[c,o]of Object.entries(SEEDALL)){if(c=='cfg'){if(!Object.keys(S.cfg||{}).length){b.set(db.doc('cfg/main'),o.main);n++}continue}if(S[c]&&S[c].length)continue;for(const[id,d]of Object.entries(o)){b.set(db.collection(c).doc(id),d);n++}}await Promise.race([b.commit(),new Promise((_,no)=>setTimeout(()=>no(new Error('الاتصال بطيء، جرب تاني')),40000))]);toast('تم استيراد '+n+' سجل ✅')}catch(e){toast('حصل خطأ: '+(e.code||'')+' '+e.message);t.disabled=false;t.textContent='حاول تاني'}}if(t.id=='upd'){t.disabled=true;await applyUpd(t)}if(t.id=='impm'){t.disabled=true;let n=0;try{for(const c of['mom','mbirth','mtx'])for(const x of SEEDM[c]){const{_id,...r}=x;_id?await db.collection(c).doc(_id).set(r):await db.collection(c).add(r);t.textContent='جاري الاستيراد '+(++n)}}catch(_){toast('حصل خطأ في الاستيراد')}}if(t.id=='imp'){t.disabled=true;let n=0;try{for(const c of['tx','hd','sheep','vet','batch'])if(!S[c].length)for(const x of SEED[c]){c=='sheep'?await db.collection(c).doc(String(x.num)).set(x):await db.collection(c).add(x);t.textContent='جاري الاستيراد '+(++n)}}catch(_){toast('حصل خطأ في الاستيراد')}}});
 document.addEventListener('change',async e=>{const k=e.target.dataset.cfg;if(k&&db){try{await db.doc('cfg/main').set({...S.cfg,[k]:+e.target.value})}catch(_){toast('مش مسموح')}}});
 render();
 try{$('#boot').remove()}catch(_){}
@@ -158,9 +162,9 @@ function loadJS(u,ms){return new Promise((ok,no)=>{const e=document.createElemen
 async function loadFB(){const V='10.12.2';for(const b of['https://www.gstatic.com/firebasejs/'+V+'/','https://cdn.jsdelivr.net/npm/firebase@'+V+'/']){try{await loadJS(b+'firebase-app-compat.js');await Promise.all(['auth','firestore'].map(n=>loadJS(b+'firebase-'+n+'-compat.js')));return true}catch(e){}}return false}
 function initApp(){
 firebase.initializeApp(FIREBASE_CONFIG);
-const auth=firebase.auth(),fs=firebase.firestore();fs.settings({experimentalForceLongPolling:true,experimentalAutoDetectLongPolling:false,merge:true});let started=false;
+const auth=firebase.auth(),fs=firebase.firestore();fs.settings({experimentalForceLongPolling:true,experimentalAutoDetectLongPolling:false,merge:true});fs.enablePersistence({synchronizeTabs:true}).catch(()=>{});let started=false;
 function start(){if(started)return;started=true;db=fs;
- ['tx','hd','sheep','vet','batch','mom','mbirth','mscan','mtx'].forEach(c=>db.collection(c).onSnapshot(s=>{S[c]=s.docs.map(d=>({id:d.id,...d.data()}));loaded[c]=1;render()},e=>toast('مفيش صلاحية: '+e.code)));
+ ['tx','hd','sheep','vet','batch','mom','mbirth','mscan','mtx'].forEach(c=>db.collection(c).onSnapshot({includeMetadataChanges:true},s=>{MT[c]={c:s.metadata.fromCache,p:s.metadata.hasPendingWrites};if(!s.metadata.fromCache)loaded[c]=1;if(!S._i)S._i={};if(!S._i[c]||s.docChanges().length){S._i[c]=1;S[c]=s.docs.map(d=>({id:d.id,...d.data()}));render()}netBanner()},e=>toast('مفيش صلاحية: '+e.code)));
  db.doc('cfg/main').onSnapshot(s=>{S.cfg=s.exists?s.data():{};if(!document.activeElement||document.activeElement.tagName!='INPUT')render()},()=>{});render()}
 auth.onAuthStateChanged(u=>{$('#login').style.display=u?'none':'flex';$('#logout').hidden=!u;if(u)start()});
 $('#lf').onsubmit=async e=>{e.preventDefault();$('#lerr').textContent='';try{await auth.signInWithEmailAndPassword(e.target.email.value.trim(),e.target.pass.value)}catch(er){var c=er&&er.code||'';$('#lerr').textContent=(c=='auth/invalid-credential'||c=='auth/wrong-password'||c=='auth/user-not-found'||c=='auth/invalid-email')?'الإيميل أو الباسورد غلط':'خطأ: '+c+' '+(er&&er.message||'')}};
