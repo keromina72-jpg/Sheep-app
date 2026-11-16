@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/google.firestore.v1.Firestore/:path*",
+      "destination": "https://firestore.googleapis.com/google.firestore.v1.Firestore/:path*"
+    }
+  ]
+}
