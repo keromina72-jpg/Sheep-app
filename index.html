@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#faf5e6"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon.svg"><title>دورة الخرفان – مارمينا</title>
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="خرفاني"><meta name="theme-color" content="#faf5e6"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon.svg"><title>خرفاني</title>
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap">
 <style>
 :root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);--bg:#faf5e6;--card:#fffefa;--card2:#f0e9d2;--tx:#2a2f1c;--mut:#767a5c;--pri:#4a8a38;--red:#d1493f;--grn:#2f8f46;--amb:#c98a0b;--sh:0 8px 24px rgba(60,60,140,.12)}
@@ -65,9 +65,9 @@ html,body{max-width:100%;overflow-x:hidden}img{max-width:100%}.mut{overflow-wrap
 #topbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}@media(min-width:900px){#topbar{max-width:1040px;margin-left:auto;margin-right:auto}}
 </style><script>window.onerror=function(m,u,l){var d=document.getElementById('boot');if(d){d.style.color='#e5484d';d.innerHTML+='<br>خطأ: '+m+' (سطر '+l+')'}}</script></head><body>
 <div id="boot" style="text-align:center;font-weight:700"></div>
-<div id="login" class="sheet" style="display:none;align-items:center;justify-content:center;background:#fff"><form id="lf" style="border-radius:30px;max-width:380px;margin:16px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.12);border:1px solid #eee;color:#2a2f1c"><div style="font-size:42px;text-align:center">🐑</div><div class="n" style="font-size:20px;text-align:center">أهلاً بيك في مزرعتك 👋</div><input name="email" type="email" placeholder="الإيميل" required autocomplete="username"><input name="pass" type="password" placeholder="الباسورد" required autocomplete="current-password"><div id="lerr" class="r" style="text-align:center"></div><button class="ghost">دخول بحسابي</button><div class="mut" style="text-align:center">أو</div><button type="button" class="go" id="demoBtn">🧪 جرّب بيانات تجريبية</button><div class="mut" style="text-align:center;font-size:12px">بيانات وهمية للتفرّج بس – مفيهاش أي حاجة من بيانات المزرعة</div><button type="button" class="ghost" id="addFarmBtn">🏡 عايز تضيف مزرعتك؟</button></form></div>
+<div id="login" class="sheet" style="display:none;align-items:center;justify-content:center;background:#fff"><form id="lf" style="border-radius:30px;max-width:380px;margin:16px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.12);border:1px solid #eee;color:#2a2f1c"><div style="font-size:42px;text-align:center">🐑</div><div class="n" style="font-size:20px;text-align:center">أهلاً بيك في خرفاني 👋</div><input name="email" type="email" placeholder="الإيميل" required autocomplete="username"><input name="pass" type="password" placeholder="الباسورد" required autocomplete="current-password"><div id="lerr" class="r" style="text-align:center"></div><button type="button" class="chip" id="forgot" style="justify-self:center">نسيت الباسورد؟</button><button class="ghost">دخول بحسابي</button><div class="mut" style="text-align:center">أو</div><button type="button" class="go" id="demoBtn">🧪 جرّب بيانات تجريبية</button><div class="mut" style="text-align:center;font-size:12px">بيانات وهمية للتفرّج بس – مفيهاش أي حاجة من بيانات المزرعة</div><button type="button" class="ghost" id="addFarmBtn">🏡 عايز تشترك في خرفاني؟</button></form></div>
 <div id="topbar"><button class="chip" id="logout" hidden>خروج</button><button class="chip" id="exportBtn" hidden>⬇️ تصدير</button></div>
-<div id="demo" class="card am" hidden style="text-align:center;font-weight:700;margin:0 0 12px">🧪 وضع تجريبي – بيانات وهمية. أي تعديل بيختفي لما تقفل الصفحة</div><div id="net"></div><div id="app"></div><div id="msg"></div>
+<div id="demo" class="card am" hidden style="text-align:center;font-weight:700;margin:0 0 12px">🧪 وضع تجريبي – بيانات وهمية. أي تعديل بيختفي لما تقفل الصفحة</div><div id="sub" class="card am" hidden style="text-align:center;font-weight:700;margin:0 0 12px"></div><div id="net"></div><div id="app"></div><div id="msg"></div>
 <button class="fab" id="fab">＋ مصروف</button>
 <nav id="nav"></nav>
 <script>
@@ -200,7 +200,7 @@ function makeDemoDB(){
  }}
 
 $('#addFarmBtn').onclick=()=>{const el=document.createElement('div');el.className='sheet';el.style.cssText='align-items:center;justify-content:center;z-index:60';
- el.innerHTML='<form style="border-radius:30px;max-width:380px;margin:16px;text-align:center"><div style="font-size:42px">🏡</div><div class="n" style="font-size:19px">لإضافة مزرعتك</div><div>اتواصل مع المالك على الرقم ده:</div><div class="n" dir="ltr" style="font-size:24px;letter-spacing:1px">01055156553</div><a class="go" href="tel:01055156553" style="text-decoration:none;display:block">📞 اتصل دلوقتي</a><a class="ghost" href="https://wa.me/201055156553" target="_blank" rel="noopener" style="text-decoration:none;display:block">💬 واتساب</a><button type="button" class="ghost" data-x>إغلاق</button></form>';
+ el.innerHTML='<form style="border-radius:30px;max-width:380px;margin:16px;text-align:center"><div style="font-size:42px">🏡</div><div class="n" style="font-size:19px">للاشتراك في خرفاني</div><div>اتواصل مع المالك على الرقم ده:</div><div class="n" dir="ltr" style="font-size:24px;letter-spacing:1px">01055156553</div><a class="go" href="tel:01055156553" style="text-decoration:none;display:block">📞 اتصل دلوقتي</a><a class="ghost" href="https://wa.me/201055156553" target="_blank" rel="noopener" style="text-decoration:none;display:block">💬 واتساب</a><button type="button" class="ghost" data-x>إغلاق</button></form>';
  el.onclick=e=>{if(e.target==el||e.target.dataset.x!=null)el.remove()};document.body.append(el)};
 $('#demoBtn').onclick=()=>{DEMO=true;$('#login').style.display='none';const lo=$('#logout');lo.hidden=false;lo.textContent='خروج من التجربة';lo.onclick=()=>location.reload();$('#demo').hidden=false;$('#net').innerHTML='';start(makeDemoDB());welcome()};
 
@@ -253,10 +253,51 @@ render();
 try{$('#boot').remove()}catch(_){}
 function loadJS(u,ms){return new Promise((ok,no)=>{const e=document.createElement('script');e.src=u;const t=setTimeout(()=>no(new Error('timeout')),ms||15000);e.onload=()=>{clearTimeout(t);ok()};e.onerror=()=>{clearTimeout(t);no(new Error('blocked'))};document.head.append(e)})}
 async function loadFB(){const V='10.12.2';for(const b of['https://www.gstatic.com/firebasejs/'+V+'/','https://cdn.jsdelivr.net/npm/firebase@'+V+'/']){try{await loadJS(b+'firebase-app-compat.js');await Promise.all(['auth','firestore'].map(n=>loadJS(b+'firebase-'+n+'-compat.js')));return true}catch(e){}}return false}
+const RULES=`rules_version = '2';
+service cloud.firestore {
+ match /databases/{d}/documents {
+  function si(){return request.auth!=null;}
+  function adm(){return si()&&exists(/databases/$(d)/documents/meta/admin)&&get(/databases/$(d)/documents/meta/admin).data.uid==request.auth.uid;}
+  function acc(){return get(/databases/$(d)/documents/accounts/$(request.auth.uid)).data;}
+  function ok(){return si()&&exists(/databases/$(d)/documents/accounts/$(request.auth.uid))&&acc().active==true&&acc().expires>request.time;}
+  match /meta/admin{allow read:if si();allow create:if si()&&request.resource.data.uid==request.auth.uid;}
+  match /accounts/{u}{allow read:if si()&&(request.auth.uid==u||adm());allow write:if adm();}
+  match /users/{u}/{p=**}{allow read,write:if (adm()&&request.auth.uid==u)||(ok()&&acc().get('dataUid',request.auth.uid)==u);}
+  match /{c}/{i}{allow read:if adm();}
+ }
+}`;
 function initApp(){
 firebase.initializeApp(FIREBASE_CONFIG);
 const auth=firebase.auth(),fs=firebase.firestore();fs.settings(/[?&]direct/.test(location.search)?{experimentalForceLongPolling:true,experimentalAutoDetectLongPolling:false,merge:true}:{host:location.host,ssl:true,experimentalForceLongPolling:true,experimentalAutoDetectLongPolling:false,merge:true});fs.enablePersistence({synchronizeTabs:true}).catch(()=>{});
-auth.onAuthStateChanged(u=>{if(DEMO)return;$('#login').style.display=u?'none':'flex';$('#logout').hidden=!u;if(u)start(fs)});
+const ns=u=>({collection:c=>fs.collection('users').doc(u).collection(c),doc:p=>fs.doc('users/'+u+'/'+p),batch:()=>fs.batch()}),TS=firebase.firestore.Timestamp,fd=t=>t.toDate().toLocaleDateString('ar-EG',{day:'numeric',month:'short',year:'numeric'}),PH='01055156553';let AU='';
+const mk=(h,z)=>{const el=document.createElement('div');el.className='sheet';if(z)el.style.zIndex=z;el.innerHTML=h;el.addEventListener('click',e=>{if(e.target==el||e.target.dataset.x!=null)el.remove()});document.body.append(el);return el};
+const gate=h=>{const el=mk('<form style="border-radius:30px;max-width:380px;margin:16px;text-align:center">'+h+'<button type="button" class="ghost" data-o>خروج</button></form>',70);el.style.alignItems='center';el.style.justifyContent='center';el.style.background='var(--bg)';el.querySelector('[data-o]').onclick=()=>auth.signOut().then(()=>location.reload());return el};
+const has=async r=>!(await r.limit(1).get()).empty;
+async function mig(u,el){try{toast('جاري الترحيل… متقفلش الصفحة');const m=ns(u);let n=0;for(const c of['tx','hd','sheep','vet','batch','mom','mbirth','mscan','mtx']){const[a,b]=await Promise.all([fs.collection(c).get(),m.collection(c).get()]),h=new Set(b.docs.map(d=>d.id)),L=a.docs.filter(d=>!h.has(d.id));for(let i=0;i<L.length;i+=15){const w=fs.batch();L.slice(i,i+15).forEach(d=>w.set(m.collection(c).doc(d.id),d.data()));await w.commit()}n+=L.length}
+ const[x,y]=await Promise.all([fs.doc('cfg/main').get(),m.doc('cfg/main').get()]);if(x.exists&&!y.exists){await m.doc('cfg/main').set(x.data());n++}toast('اتنقل '+n+' سجل ✅ (الأصل لسه موجود)');if(el)el.remove()}catch(er){toast('فشل الترحيل: '+(er.code||er.message))}}
+async function chkMig(u){try{const m=ns(u),[r1,r2,m1,m2]=await Promise.all([has(fs.collection('sheep')),has(fs.collection('tx')),has(m.collection('sheep')),has(m.collection('tx'))]);if((r1||r2)&&!m1&&!m2){const el=mk('<form style="text-align:center"><div style="font-size:40px">📥</div><div class="n" style="font-size:18px">لقيت بيانات المزرعة القديمة</div><div class="mut">هتتنسخ لحسابك (الأصل مبيتمسحش) – مرة واحدة</div><button type="button" class="go" data-m>ترحيل دلوقتي</button><button type="button" class="ghost" data-x>بعدين</button></form>',65);el.querySelector('[data-m]').onclick=()=>mig(u,el)}}catch(_){}}
+async function panel(){let L=[];
+ const el=mk('<form><div class="n" style="font-size:18px">👑 العملاء والاشتراكات</div><div id="al" class="mut">جاري التحميل…</div><div class="n">➕ عميل جديد</div><input name="nm" placeholder="الاسم"><input name="em" type="email" placeholder="الإيميل" required><input name="pw" placeholder="الباسورد (6 حروف على الأقل)" required minlength="6"><input name="dy" type="number" value="30" placeholder="مدة الاشتراك بالأيام"><div id="pe" class="r"></div><button class="go">إنشاء الحساب</button><button type="button" class="ghost" data-q="rules">📜 نسخ قواعد Firestore</button><button type="button" class="ghost" data-mg>📥 ترحيل بيانات المزرعة القديمة</button><button type="button" class="ghost" data-x>إغلاق</button></form>',65);
+ const load=async()=>{const q=await fs.collection('accounts').get(),now=Date.now();L=q.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.expires.toMillis()-b.expires.toMillis());
+  el.querySelector('#al').innerHTML=L.map(a=>{const ex=a.expires.toMillis(),live=a.active&&ex>now;return `<div class="row" style="flex-wrap:wrap"><div class="grow"><div class="n ell">${esc(a.name||a.email)}</div><div class="mut" dir="ltr" style="text-align:right">${esc(a.email)}</div><div class="mut">${live?'ينتهي '+fd(a.expires)+' · باقي '+Math.ceil((ex-now)/864e5)+' يوم':a.active?'انتهى '+fd(a.expires):'موقوف'}</div></div><div class="n ${live?'gr':'r'}">${live?'شغال':'واقف'}</div><div class="chips" style="width:100%;margin:0 0 6px"><button type="button" class="chip on" data-a="m:${a.id}">+30 يوم</button><button type="button" class="chip on" data-a="y:${a.id}">+سنة</button><button type="button" class="chip" data-a="t:${a.id}">${a.active?'إيقاف':'تشغيل'}</button><button type="button" class="chip" data-a="p:${a.id}">إيميل باسورد</button></div></div>`}).join('')||'<div class="empty">لسه مفيش عملاء</div>'};
+ el.addEventListener('click',async e=>{if(e.target.closest('[data-mg]'))return mig(AU);const b=e.target.closest('[data-a]');if(!b)return;const[k,id]=b.dataset.a.split(':'),a=L.find(x=>x.id==id);if(!a)return;
+  try{if(k=='m'||k=='y')await fs.doc('accounts/'+id).update({active:true,expires:TS.fromMillis(Math.max(Date.now(),a.expires.toMillis())+(k=='m'?30:365)*864e5)});else if(k=='t')await fs.doc('accounts/'+id).update({active:!a.active});else{await auth.sendPasswordResetEmail(a.email);toast('اتبعت لينك تغيير الباسورد للعميل')}load()}catch(er){toast('خطأ: '+(er.code||er.message))}});
+ el.querySelector('form').onsubmit=async e=>{e.preventDefault();const f=e.target,em=f.em.value.trim(),pw=f.pw.value,pe=el.querySelector('#pe');pe.textContent='';
+  try{const sec=firebase.apps.find(x=>x.name=='sec')||firebase.initializeApp(FIREBASE_CONFIG,'sec'),sa=sec.auth();let u;try{u=(await sa.createUserWithEmailAndPassword(em,pw)).user}catch(er){if(er.code=='auth/email-already-in-use')u=(await sa.signInWithEmailAndPassword(em,pw)).user;else throw er}
+   await fs.doc('accounts/'+u.uid).set({email:em.toLowerCase(),name:f.nm.value.trim(),active:true,expires:TS.fromMillis(Date.now()+(+f.dy.value||30)*864e5),created:TS.now()});await sa.signOut();f.reset();f.dy.value=30;toast('اتعمل الحساب ✅ ابعت للعميل الإيميل والباسورد');load()}catch(er){pe.textContent='خطأ: '+(er.code||er.message)}};
+ load().catch(er=>{el.querySelector('#al').textContent='خطأ: '+(er.code||er.message)})}
+auth.onAuthStateChanged(async u=>{if(DEMO)return;$('#login').style.display=u?'none':'flex';$('#logout').hidden=!u;if(!u)return;
+ try{const[ad,ac]=await Promise.all([fs.doc('meta/admin').get(),fs.doc('accounts/'+u.uid).get()]);
+  if(ad.exists&&ad.data().uid==u.uid){AU=u.uid;$('#topbar').insertAdjacentHTML('beforeend','<button class="chip" id="admBtn">👑 العملاء</button>');$('#admBtn').onclick=panel;start(ns(u.uid));chkMig(u.uid);return}
+  if(!ad.exists){const g=gate('<div style="font-size:40px">👑</div><div class="n" style="font-size:19px">أول تشغيل</div><div>مفيش مالك للتطبيق لسه. لو انت صاحب خرفاني دوس تفعيل (مرة واحدة بس).</div><button type="button" class="go" data-c>تفعيل حساب المالك</button>');g.querySelector('[data-c]').onclick=async()=>{try{await fs.doc('meta/admin').set({uid:u.uid,email:u.email});location.reload()}catch(er){toast('مش مسموح: '+(er.code||''))}};return}
+  const a=ac.exists?ac.data():null;
+  if(!a)return gate('<div class="n" style="font-size:19px">الحساب ده مش مفعّل</div><div>للاشتراك كلّم: <b dir="ltr">'+PH+'</b></div><a class="go" href="https://wa.me/2'+PH+'" target="_blank" rel="noopener" style="text-decoration:none;display:block">💬 واتساب</a>');
+  const ex=a.expires.toMillis();
+  if(!a.active||ex<Date.now())return gate('<div style="font-size:40px">⏳</div><div class="n" style="font-size:19px">'+(a.active?'اشتراكك خلص':'الاشتراك موقوف')+'</div><div>للتجديد كلّم: <b dir="ltr">'+PH+'</b></div><a class="go" href="https://wa.me/2'+PH+'" target="_blank" rel="noopener" style="text-decoration:none;display:block">💬 واتساب</a>');
+  const dl=Math.ceil((ex-Date.now())/864e5);if(dl<=7){$('#sub').hidden=false;$('#sub').textContent='⏳ اشتراكك بينتهي بعد '+dl+' يوم – كلّم '+PH+' للتجديد'}
+  start(ns(a.dataUid||u.uid))
+ }catch(er){gate('<div class="r">مش قادر أقرا بيانات الحساب ('+esc(er.code||er.message)+')</div><div class="mut">لو ده أول تشغيل بعد التحديث: لازم قواعد Firestore الجديدة تتنشر الأول</div><button type="button" class="go" onclick="location.reload()">إعادة المحاولة</button>')}});
+$('#forgot').onclick=async()=>{const em=$('#lf').email.value.trim();if(!em)return $('#lerr').textContent='اكتب الإيميل الأول';try{await auth.sendPasswordResetEmail(em);$('#lerr').textContent='اتبعتلك لينك تغيير الباسورد على الإيميل'}catch(er){$('#lerr').textContent='خطأ: '+(er.code||'')}};
 $('#lf').onsubmit=async e=>{e.preventDefault();$('#lerr').textContent='';try{await auth.signInWithEmailAndPassword(e.target.email.value.trim(),e.target.pass.value)}catch(er){var c=er&&er.code||'';$('#lerr').textContent=(c=='auth/invalid-credential'||c=='auth/wrong-password'||c=='auth/user-not-found'||c=='auth/invalid-email')?'الإيميل أو الباسورد غلط':'خطأ: '+c+' '+(er&&er.message||'')}};
 $('#logout').onclick=()=>auth.signOut().then(()=>location.reload());
 
@@ -344,20 +385,8 @@ function report(){if(worker())return toast('التقرير للمالك بس');c
  <h2>المصاريف حسب النوع</h2><table>${Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>tr(k,f(v)+' ج')).join('')||tr('—','—')}</table>
  <h2>القطيع</h2><table>${tr('العدد الحالي',cur()+' راس')}${tr('متوسط الوزن',ws.length?e1(ws.reduce((a,b)=>a+b,0)/ws.length)+' كجم':'—')}${tr('متوسط الزيادة اليومية',gs.length?f(gs.reduce((a,b)=>a+b,0)/gs.length*1000)+' جم':'—')}${tr('جاهز للبيع',rd)}${tr('نافق الشهر ده',dead)}${tr('مواليد الشهر ده',bi)}</table>
  <h2>التعاملات البيطرية</h2><table>${vt.map(v=>tr(esc(v.note),dt(v.date))).join('')||tr('—','—')}</table><script>setTimeout(function(){print()},400)<\/script></body></html>`);w.document.close()}
-function settings(){const g=S.cfg||{},el=sheetEl(`<form><div class="n" style="font-size:18px">⚙️ إعدادات</div><div class="lbl">وزن البيع المستهدف (كجم) – فاضي = يتحسب من سعر الكيلو</div><input type="number" data-st="tw" value="${g.tw||''}"><div class="lbl">سن الفطام (يوم)</div><input type="number" data-st="wean_days" value="${g.wean_days||60}"><div class="lbl">إيميلات المالك (بفاصلة). أي حساب تاني يشوف الأوزان والبيطري والأمهات بس</div><input data-st="owners" value="${esc(g.owners||'')}" placeholder="you@mail.com, partner@mail.com"><button type="button" class="ghost" data-q="rules">📜 نسخ قواعد Firestore للحسابات</button><button type="button" class="ghost" data-q="notif">🔔 تفعيل تنبيهات الموبايل</button><div class="mut">التنبيهات بتظهر لما تفتح التطبيق. التنبيه وهو مقفول محتاج Firebase Cloud Messaging وسيرفر.</div><button type="button" class="go" data-x>تم</button></form>`);document.body.append(el)}
-const rules=()=>`rules_version = '2';
-service cloud.firestore {
- match /databases/{d}/documents {
-  function owner(){return request.auth.token.email.lower() in [${(owners().length?owners():['owner@example.com']).map(x=>"'"+x+"'").join(',')}];}
-  match /sheep/{i}{allow read,write: if request.auth!=null;}
-  match /vet/{i}{allow read,write: if request.auth!=null;}
-  match /mbirth/{i}{allow read,write: if request.auth!=null;}
-  match /mscan/{i}{allow read,write: if request.auth!=null;}
-  match /mom/{i}{allow read: if request.auth!=null; allow write: if owner();}
-  match /cfg/{i}{allow read: if request.auth!=null; allow write: if owner();}
-  match /{c}/{i}{allow read,write: if owner();}
- }
-}`;
+function settings(){const g=S.cfg||{},el=sheetEl(`<form><div class="n" style="font-size:18px">⚙️ إعدادات</div><div class="lbl">وزن البيع المستهدف (كجم) – فاضي = يتحسب من سعر الكيلو</div><input type="number" data-st="tw" value="${g.tw||''}"><div class="lbl">سن الفطام (يوم)</div><input type="number" data-st="wean_days" value="${g.wean_days||60}"><div class="lbl">إيميلات المالك (بفاصلة). أي حساب تاني يشوف الأوزان والبيطري والأمهات بس</div><input data-st="owners" value="${esc(g.owners||'')}" placeholder="you@mail.com, partner@mail.com"><button type="button" class="ghost" data-q="notif">🔔 تفعيل تنبيهات الموبايل</button><div class="mut">التنبيهات بتظهر لما تفتح التطبيق. التنبيه وهو مقفول محتاج Firebase Cloud Messaging وسيرفر.</div><button type="button" class="go" data-x>تم</button></form>`);document.body.append(el)}
+const rules=()=>RULES;
 // ---- events
 document.addEventListener('click',e=>{if(e.target.closest('.selc')){e.stopImmediatePropagation();return}const r=e.target.closest('tr[data-edit^="sheep:"]');if(r){e.stopImmediatePropagation();openSheep(r.dataset.edit.split(':')[1])}},true);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(!b)return;const[a,v]=b.dataset.q.split(':'),s=S.sheep.find(x=>x.id==sdId);
@@ -413,7 +442,7 @@ render=()=>{if(worker()){if(tab=='home'||tab=='tx')tab='herd';if(sub.herd=='batc
 // ---- offline chip + local notifications
 const off=()=>{let e=$q('#off');if(!navigator.onLine){if(!e){e=document.createElement('div');e.id='off';e.style.cssText='position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:#d97706;color:#fff;padding:6px 14px;border-radius:99px;font-weight:700;font-size:12px;z-index:50;white-space:nowrap';e.textContent='📴 أوفلاين – التسجيل شغال وهيترفع لما النت يرجع';document.body.append(e)}}else if(e)e.remove()};
 addEventListener('online',off);addEventListener('offline',off);off();
-const chk=()=>{try{if(DEMO||!db||!('Notification' in window)||Notification.permission!='granted'||!loaded.vet||!loaded.mom||localStorage.ntf==today())return;const o=alerts();if(!o.length)return;localStorage.ntf=today();new Notification('🐑 مزرعتك',{body:o.slice(0,5).map(x=>x.n+' – '+x.a).join('\n')})}catch(_){}};
+const chk=()=>{try{if(DEMO||!db||!('Notification' in window)||Notification.permission!='granted'||!loaded.vet||!loaded.mom||localStorage.ntf==today())return;const o=alerts();if(!o.length)return;localStorage.ntf=today();new Notification('🐑 خرفاني',{body:o.slice(0,5).map(x=>x.n+' – '+x.a).join('\n')})}catch(_){}};
 setInterval(chk,60000);setTimeout(chk,6000);
 render();
 })();
