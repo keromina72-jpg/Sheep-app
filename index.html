@@ -141,6 +141,7 @@ function feedAll(barns){if(barns.length<2)return'';const g=S.cfg||{},t=[0,0,0];b
  if(!t.some(x=>x>0))return'';return `<div class="card"><div class="n">📦 إجمالي كل العنابر في اليوم</div>${[['🌾','علف'],['🌿','دريس'],['🪵','تبن']].map(([ic,nm],i)=>t[i]>0?row(ic,nm,'الطن يكفي '+Math.floor(1000/t[i])+' يوم',e1(t[i])+' كجم'):'').join('')}</div>`}
 const BREEDS=['','برقي','رحماني','أوسيمي','صعيدي','فرنساوي','سوداني','صومالي','روماني','نعيمي','حري','عواسي','بلدي','هجين','أخرى'];
 const bgain=b=>{if(!b||!b.breed)return null;const g=+b.gain;return (g>0?g:b.breed=='برقي'?200:300)/1000};
+const rate=s=>{const k=Object.keys(s.w||{}).sort().slice(-3);if(k.length<2)return null;const d=(new Date(k[k.length-1])-new Date(k[0]))/864e5;return d>0?(s.w[k[k.length-1]]-s.w[k[0]])/d:null};
 const batchRec=s=>{if(s.batch){const b=S.batch.find(x=>x.note==s.batch);if(b)return b}return S.batch.find(x=>+s.num>=+x.from_&&+s.num<=+x.to)||null};
 const stdG=s=>bgain(batchRec(s));
 const batchOf=s=>{if(s.batch)return s.batch;const b=S.batch.find(x=>+s.num>=+x.from_&&+s.num<=+x.to);return b?(b.note||'دفعة'):'—'};
@@ -245,8 +246,9 @@ $('#demoBtn').onclick=()=>{DEMO=true;$('#login').style.display='none';const lo=$
 
 function netBanner(){const v=Object.values(MT),el=$('#net');if(!el)return;
  if(v.some(m=>m.p))el.innerHTML='<div class="card am" style="text-align:center;font-weight:700">⏳ بيتحفظ على السيرفر… متقفلش الصفحة</div>';
- else if(v.length&&v.every(m=>m.c))el.innerHTML='<div class="card r" style="text-align:center;font-weight:700">⚠️ مش واصل للسيرفر – اللي بتعرضه ممكن مايكونش محفوظ</div>';
+ else if(v.length&&v.every(m=>m.c))el.innerHTML='<div class="card r" style="text-align:center;font-weight:700">⚠️ مش واصل للسيرفر – اللي بتعرضه ممكن مايكونش محفوظ<div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap"><button class="chip on" id="diag" type="button">🔍 فحص الاتصال</button>'+(/[?&]direct/.test(location.search)?'':'<a class="chip on" href="?direct" style="text-decoration:none">🔄 جرّب اتصال مباشر</a>')+'</div></div>';
  else el.innerHTML=''}
+setTimeout(()=>{try{const v=Object.values(MT);if(!DEMO&&db&&navigator.onLine&&v.length&&v.every(m=>m.c)&&!/[?&]direct/.test(location.search)&&!sessionStorage.triedDirect){sessionStorage.triedDirect=1;location.replace(location.pathname+'?direct')}}catch(_){}},15000);
 const OLD=['2026-06-10','2026-07-11'],badV=y=>(y.date=='2026-07-11'&&/ديفكول/.test(y.note))||(y.date=='2026-06-10'&&/ليفافلوك/.test(y.note)),cl=s=>{const{id,...r}=s;return r};
 const addD=(s,n)=>{const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const docId=n=>/^\d+$/.test(String(n))?String(n):'n'+[...String(n)].map(c=>c.charCodeAt(0).toString(36)).join('');
@@ -432,7 +434,7 @@ function report(){if(worker())return toast('التقرير للمالك بس');c
  <h2>المصاريف حسب النوع</h2><table>${Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>tr(k,f(v)+' ج')).join('')||tr('—','—')}</table>
  <h2>القطيع</h2><table>${tr('العدد الحالي',cur()+' راس')}${tr('متوسط الوزن',ws.length?e1(ws.reduce((a,b)=>a+b,0)/ws.length)+' كجم':'—')}${tr('متوسط الزيادة اليومية',gs.length?f(gs.reduce((a,b)=>a+b,0)/gs.length*1000)+' جم':'—')}${tr('جاهز للبيع',rd)}${tr('نافق الشهر ده',dead)}${tr('مواليد الشهر ده',bi)}</table>
  <h2>التعاملات البيطرية</h2><table>${vt.map(v=>tr(esc(v.note),dt(v.date))).join('')||tr('—','—')}</table><script>setTimeout(function(){print()},400)<\/script></body></html>`);w.document.close()}
-function settings(){const g=S.cfg||{},el=sheetEl(`<form><div class="n" style="font-size:18px">⚙️ إعدادات</div><div class="lbl">وزن البيع المستهدف (كجم) – فاضي = يتحسب من سعر الكيلو</div><input type="number" data-st="tw" value="${g.tw||''}"><div class="lbl">سن الفطام (يوم)</div><input type="number" data-st="wean_days" value="${g.wean_days||60}"><div class="lbl">إيميلات المالك (بفاصلة). أي حساب تاني يشوف الأوزان والبيطري والأمهات بس</div><input data-st="owners" value="${esc(g.owners||'')}" placeholder="you@mail.com, partner@mail.com"><button type="button" class="ghost" data-q="notif">🔔 تفعيل تنبيهات الموبايل</button><div class="mut">التنبيهات بتظهر لما تفتح التطبيق. التنبيه وهو مقفول محتاج Firebase Cloud Messaging وسيرفر.</div><button type="button" class="go" data-x>تم</button></form>`);document.body.append(el)}
+function settings(){const g=S.cfg||{},el=sheetEl(`<form><div class="n" style="font-size:18px">⚙️ إعدادات</div><div class="lbl">وزن البيع المستهدف (كجم) – فاضي = يتحسب من سعر الكيلو</div><input type="number" data-st="tw" value="${g.tw||''}"><div class="lbl">سن الفطام (يوم)</div><input type="number" data-st="wean_days" value="${g.wean_days||60}"><div class="lbl">إيميلات المالك (بفاصلة). أي حساب تاني يشوف الأوزان والبيطري والأمهات بس</div><input data-st="owners" value="${esc(g.owners||'')}" placeholder="you@mail.com, partner@mail.com"><button type="button" class="ghost" data-q="notif">🔔 تفعيل تنبيهات الموبايل</button><button type="button" class="ghost" id="diag">🔍 فحص الاتصال بالسيرفر</button><div class="mut">التنبيهات بتظهر لما تفتح التطبيق. التنبيه وهو مقفول محتاج Firebase Cloud Messaging وسيرفر.</div><button type="button" class="go" data-x>تم</button></form>`);document.body.append(el)}
 const rules=()=>RULES;
 // ---- events
 document.addEventListener('click',e=>{if(e.target.closest('.selc')){e.stopImmediatePropagation();return}const r=e.target.closest('tr[data-edit^="sheep:"]');if(r){e.stopImmediatePropagation();openSheep(r.dataset.edit.split(':')[1])}},true);
